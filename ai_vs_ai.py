@@ -11,7 +11,7 @@ from utils import (
     get_opponent,
     traduction_move,
 )
-
+SPACE = "---|---|---|---"
 
 def terminal_test(board, player):
 
@@ -312,7 +312,7 @@ def display_board(board):
             board[0][3] or " ",
         )
     )
-    print("  ---|---|---|---")
+    print(SPACE)
     print(
         "2  {} | {} | {} | {}".format(
             board[1][0] or " ",
@@ -321,7 +321,7 @@ def display_board(board):
             board[1][3] or " ",
         )
     )
-    print("  ---|---|---|---")
+    print(SPACE)
     print(
         "3  {} | {} | {} | {}".format(
             board[2][0] or " ",
@@ -330,7 +330,7 @@ def display_board(board):
             board[2][3] or " ",
         )
     )
-    print("  ---|---|---|---")
+    print(SPACE)
     print(
         "4  {} | {} | {} | {}".format(
             board[3][0] or " ",
