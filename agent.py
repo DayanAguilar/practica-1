@@ -1,6 +1,14 @@
-
 # Define the player colors
-from utils import *
+from utils import (
+    BLACK,
+    WHITE,
+    EMPTY,
+    forms_corners,
+    forms_square,
+    make_move,
+    get_opponent,
+)
+import copy
 
 
 def terminal_test(board, player):
@@ -13,12 +21,22 @@ def terminal_test(board, player):
         if [board[x][j] for x in range(4)] == [player, player, player, player]:
             return True
 
-    if board[0][0] == player and board[0][3] == player and board[3][0] == player and board[3][3] == player:
+    if (
+        board[0][0] == player
+        and board[0][3] == player
+        and board[3][0] == player
+        and board[3][3] == player
+    ):
         return True
 
     for i in range(3):
         for j in range(3):
-            if board[i][j] == player and board[i][j+1] == player and board[i+1][j] == player and board[i+1][j+1] == player:
+            if (
+                board[i][j] == player
+                and board[i][j + 1] == player
+                and board[i + 1][j] == player
+                and board[i + 1][j + 1] == player
+            ):
                 return True
 
     return False
@@ -31,41 +49,38 @@ def find_adjacencies(board):
     for i in range(3):
         for j in range(3):
             if board[i][j] == BLACK:
-                if board[i+1][j] == BLACK:
+                if board[i + 1][j] == BLACK:
                     number_b_adj += 1
-                if board[i-1][j] == BLACK:
+                if board[i - 1][j] == BLACK:
                     number_b_adj += 1
-                if board[i][j+1] == BLACK:
+                if board[i][j + 1] == BLACK:
                     number_b_adj += 1
-                if board[i][j-1] == BLACK:
+                if board[i][j - 1] == BLACK:
                     number_b_adj += 1
-                if board[i+1][j-1] == BLACK:
+                if board[i + 1][j - 1] == BLACK:
                     number_b_adj += 1
-                if board[i+1][j+1] == BLACK:
+                if board[i + 1][j + 1] == BLACK:
                     number_b_adj += 1
-                if board[i-1][j+1] == BLACK:
+                if board[i - 1][j + 1] == BLACK:
                     number_b_adj += 1
-                if board[i-1][j-1] == BLACK:
+                if board[i - 1][j - 1] == BLACK:
                     number_b_adj += 1
 
             elif board[i][j] == WHITE:
-                if board[i+1][j] == WHITE:
+                if board[i + 1][j] == WHITE:
                     number_w_adj += 1
-                if board[i-1][j] == WHITE:
+                if board[i - 1][j] == WHITE:
                     number_w_adj += 1
-                if board[i][j+1] == WHITE:
+                if board[i][j + 1] == WHITE:
                     number_w_adj += 1
-                if board[i][j-1] == WHITE:
+                if board[i][j - 1] == WHITE:
                     number_w_adj += 1
     return number_b_adj, number_w_adj
 
 
 def second_evaluation_function(state):
     board = state[0]
-    weights = [[3, 2, 2, 3],
-               [2, 1, 1, 2],
-               [2, 1, 1, 2],
-               [3, 2, 2, 3]]
+    weights = [[3, 2, 2, 3], [2, 1, 1, 2], [2, 1, 1, 2], [3, 2, 2, 3]]
 
     player1_score = 0
     player2_score = 0
@@ -78,7 +93,7 @@ def second_evaluation_function(state):
                 player2_score += weights[i][j]
 
     adj1, adj2 = find_adjacencies(board)
-    value = (player1_score-adj1) - (player2_score-adj2)
+    value = (player1_score - adj1) - (player2_score - adj2)
     return value
 
 
@@ -116,10 +131,7 @@ def get_all_moves(board, player):
 def first_evaluation_function(state):
     board = state[0]
 
-    weights = [[2, 2, 2, 2],
-               [2, 1, 1, 2],
-               [2, 1, 1, 2],
-               [2, 2, 2, 2]]
+    weights = [[2, 2, 2, 2], [2, 1, 1, 2], [2, 1, 1, 2], [2, 2, 2, 2]]
 
     player1_score = 0
     player2_score = 0
@@ -134,28 +146,34 @@ def first_evaluation_function(state):
     player1_moves = len(get_all_moves(board, BLACK))
     player2_moves = len(get_all_moves(board, WHITE))
 
-    value = player1_score - player2_score + \
-        (player1_moves - player2_moves) * 0.1
+    value = player1_score - player2_score + (player1_moves - player2_moves) * 0.1
     return value
 
 
-def AlphaBetaPrunningDepth(state, depth, alpha, beta, maximizing_player, available_moves, counter):
+def AlphaBetaPrunningDepth(
+    state, depth, alpha, beta, maximizing_player, available_moves, counter
+):
     board = state[0]
     player = state[1]
     counter += 1
 
-    if depth == 0 or (terminal_test(state[0], BLACK) > 0) or (terminal_test(state[0], WHITE) > 0):
+    if (
+        depth == 0
+        or (terminal_test(state[0], BLACK) > 0)
+        or (terminal_test(state[0], WHITE) > 0)
+    ):
         return second_evaluation_function(state), 0, counter
-#       return first_evaluation_function(state), 0, counter
+    #       return first_evaluation_function(state), 0, counter
 
     if maximizing_player:
-        max_value = float('-inf')
+        max_value = float("-inf")
         best_move = None
         for move in available_moves:
             new_board = make_move(board, move, player)
             new_state = [new_board, get_opponent(player)]
-            value, _, counter = AlphaBetaPrunningDepth(new_state, depth-1, alpha,
-                                                       beta, False, available_moves, counter)
+            value, _, counter = AlphaBetaPrunningDepth(
+                new_state, depth - 1, alpha, beta, False, available_moves, counter
+            )
             if value > max_value:
                 max_value = value
                 best_move = move
@@ -165,13 +183,14 @@ def AlphaBetaPrunningDepth(state, depth, alpha, beta, maximizing_player, availab
         return max_value, best_move, counter
 
     else:
-        min_value = float('inf')
+        min_value = float("inf")
         best_move = None
         for move in available_moves:
             new_board = make_move(board, move, player)
             new_state = [new_board, get_opponent(player)]
-            value, _, counter = AlphaBetaPrunningDepth(new_state, depth-1, alpha,
-                                                       beta, True, available_moves, counter)
+            value, _, counter = AlphaBetaPrunningDepth(
+                new_state, depth - 1, alpha, beta, True, available_moves, counter
+            )
             if value < min_value:
                 min_value = value
                 best_move = move
