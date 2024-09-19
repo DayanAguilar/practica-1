@@ -4,6 +4,7 @@ from agent import AlphaBetaPrunningDepth
 from agent_no_cutoff import AlphaBetaPrunning
 from utils import *
 
+SPACE = "  ---|---|---|---"
 
 def create_board():
     board = [[None for j in range(4)] for i in range(4)]
@@ -46,13 +47,13 @@ def display_board(board):
     print('   A   B   C   D')
     print('1  {} | {} | {} | {}'.format(
         board[0][0] or ' ', board[0][1] or ' ', board[0][2] or ' ', board[0][3] or ' '))
-    print('  ---|---|---|---')
+    print(SPACE)
     print('2  {} | {} | {} | {}'.format(
         board[1][0] or ' ', board[1][1] or ' ', board[1][2] or ' ', board[1][3] or ' '))
-    print('  ---|---|---|---')
+    print(SPACE)
     print('3  {} | {} | {} | {}'.format(
         board[2][0] or ' ', board[2][1] or ' ', board[2][2] or ' ', board[2][3] or ' '))
-    print('  ---|---|---|---')
+    print(SPACE)
     print('4  {} | {} | {} | {}'.format(
         board[3][0] or ' ', board[3][1] or ' ', board[3][2] or ' ', board[3][3] or ' '))
 
