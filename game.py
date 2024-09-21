@@ -67,7 +67,7 @@ def get_user_move(state):
     while True:
         try:
             move_str = input('Enter your move (e.g., C2 SE): ')
-            col, row, dir = traduction_move(move_str.upper())
+            col, row, _ = traduction_move(move_str.upper())
             if board[col][row] == None or board[col][row] == get_opponent(player):
                 return False, 0
             return True, move_str.upper()
