@@ -141,8 +141,6 @@ def AlphaBetaPrunningDepth(
         or (terminal_test(state[0], WHITE) > 0)
     ):
         return second_evaluation_function(state), 0, counter
-    #       return first_evaluation_function(state), 0, counter
-
     if maximizing_player:
         max_value = float("-inf")
         best_move = None
