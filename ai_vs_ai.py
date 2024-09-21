@@ -253,7 +253,7 @@ def AlphaBetaPrunningDepth2(
 
 
 def create_board():
-    board = [[None for j in range(4)] for _ in range(4)]
+    board = [[None for _ in range(4)] for _ in range(4)]
     board[0][0] = "B"
     board[0][3] = "W"
     board[1][1] = "B"
