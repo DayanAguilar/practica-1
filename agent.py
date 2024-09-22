@@ -75,6 +75,13 @@ def second_evaluation_function(state):
     return value
 
 
+def is_winning_or_creates_special_case(temp_board, player):
+    return (
+        terminal_test(temp_board, player) > 0
+        or forms_square(temp_board, player)
+        or forms_corners(temp_board, player)
+    )
+
 def get_all_moves(board, player):
     """
     Returns all available moves for a given player on the current board.
@@ -83,20 +90,12 @@ def get_all_moves(board, player):
     for i in range(4):
         for j in range(4):
             if board[i][j] == EMPTY:
-                # Check if the move would create a winning line
+                # Simulate the move
                 temp_board = copy.deepcopy(board)
                 temp_board[i][j] = player
-                if terminal_test(temp_board, player) > 0:
-                    moves.append((i, j))
-                    continue
 
-                # Check if the move would create a square
-                if forms_square(temp_board, player):
-                    moves.append((i, j))
-                    continue
-
-                # Check if the move would create a tile in every corner
-                if forms_corners(temp_board, player):
+                # Check if the move results in a win or special conditions
+                if is_winning_or_creates_special_case(temp_board, player):
                     moves.append((i, j))
                     continue
 
@@ -104,6 +103,7 @@ def get_all_moves(board, player):
                 moves.append((i, j))
 
     return moves
+
 
 
 def first_evaluation_function(state):
