@@ -1,7 +1,7 @@
 import time
 import random
 from agent import AlphaBetaPrunningDepth
-from agent_no_cutoff import AlphaBetaPrunning
+from agent_no_cutoff import alpha_beta_pruning
 from utils import *
 
 SPACE = "  ---|---|---|---"
@@ -147,7 +147,7 @@ def get_computer_move_no_cutoff(state):
     if not available_moves:
         return None
 
-    _, best_move = AlphaBetaPrunning(state, float(
+    _, best_move = alpha_beta_pruning(state, float(
         '-inf'), float('inf'), True, available_moves)
     return best_move
 

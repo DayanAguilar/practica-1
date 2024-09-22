@@ -79,7 +79,7 @@ def utility(state):
         return 0
 
 
-def AlphaBetaPrunning(state, alpha, beta, maximizing_player, available_moves):
+def alpha_beta_pruning(state, alpha, beta, maximizing_player, available_moves):
     board = state[0]
     player = state[1]
 
