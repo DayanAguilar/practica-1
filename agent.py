@@ -131,46 +131,32 @@ def first_evaluation_function(state):
 def AlphaBetaPrunningDepth(
     state, depth, alpha, beta, maximizing_player, available_moves, counter
 ):
-    board = state[0]
-    player = state[1]
+    board, player = state
     counter += 1
+    
+    if depth == 0 or terminal_test(board, BLACK) > 0 or terminal_test(board, WHITE) > 0:
+        return second_evaluation_function(state), None, counter
 
-    if (
-        depth == 0
-        or (terminal_test(state[0], BLACK) > 0)
-        or (terminal_test(state[0], WHITE) > 0)
-    ):
-        return second_evaluation_function(state), 0, counter
-    if maximizing_player:
-        max_value = float("-inf")
-        best_move = None
-        for move in available_moves:
-            new_board = make_move(board, move, player)
-            new_state = [new_board, get_opponent(player)]
-            value, _, counter = AlphaBetaPrunningDepth(
-                new_state, depth - 1, alpha, beta, False, available_moves, counter
-            )
-            if value > max_value:
-                max_value = value
-                best_move = move
-            alpha = max(alpha, max_value)
-            if beta <= alpha:
-                break
-        return max_value, best_move, counter
+    best_move = None
+    value_func = max if maximizing_player else min
+    extreme_value = float("-inf") if maximizing_player else float("inf")
 
-    else:
-        min_value = float("inf")
-        best_move = None
-        for move in available_moves:
-            new_board = make_move(board, move, player)
-            new_state = [new_board, get_opponent(player)]
-            value, _, counter = AlphaBetaPrunningDepth(
-                new_state, depth - 1, alpha, beta, True, available_moves, counter
-            )
-            if value < min_value:
-                min_value = value
-                best_move = move
-            beta = min(beta, min_value)
-            if beta <= alpha:
-                break
-        return min_value, best_move, counter
+    for move in available_moves:
+        new_board = make_move(board, move, player)
+        new_state = [new_board, get_opponent(player)]
+        value, _, counter = AlphaBetaPrunningDepth(
+            new_state, depth - 1, alpha, beta, not maximizing_player, available_moves, counter
+        )
+        if value_func(value, extreme_value) == value:
+            extreme_value = value
+            best_move = move
+
+        if maximizing_player:
+            alpha = max(alpha, extreme_value)
+        else:
+            beta = min(beta, extreme_value)
+        if beta <= alpha:
+            break
+
+    return extreme_value, best_move, counter
+
