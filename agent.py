@@ -128,7 +128,7 @@ def first_evaluation_function(state):
     return value
 
 
-def AlphaBetaPrunningDepth(
+def alpha_beta_prunning_depth(
     state, depth, alpha, beta, maximizing_player, available_moves, counter
 ):
     board, player = state
@@ -144,7 +144,7 @@ def AlphaBetaPrunningDepth(
     for move in available_moves:
         new_board = make_move(board, move, player)
         new_state = [new_board, get_opponent(player)]
-        value, _, counter = AlphaBetaPrunningDepth(
+        value, _, counter = alpha_beta_prunning_depth(
             new_state, depth - 1, alpha, beta, not maximizing_player, available_moves, counter
         )
         if value_func(value, extreme_value) == value:

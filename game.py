@@ -1,6 +1,6 @@
 import time
 import random
-from agent import AlphaBetaPrunningDepth
+from agent import alpha_beta_prunning_depth
 from agent_no_cutoff import alpha_beta_pruning
 from utils import *
 
@@ -126,7 +126,7 @@ def get_computer_move(state):
         return None
 
     max_depth = 3
-    _, best_move, counter = AlphaBetaPrunningDepth(state, max_depth, float(
+    _, best_move, counter = alpha_beta_prunning_depth(state, max_depth, float(
         '-inf'), float('inf'), True, available_moves, counter)
     print("Number of states expanded: ", counter)
     return best_move
