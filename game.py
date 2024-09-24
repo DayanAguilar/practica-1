@@ -2,7 +2,7 @@ import time
 import random
 from agent import alpha_beta_prunning_depth
 from agent_no_cutoff import alpha_beta_pruning
-from utils import *
+from utils import WHITE,BLACK,traduction_move,get_opponent,make_move
 
 SPACE = "  ---|---|---|---"
 
