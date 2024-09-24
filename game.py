@@ -75,36 +75,27 @@ def get_user_move(state):
             print('Invalid move. Please try again.')
 
 
+def is_out_of_bounds(row, col, board):
+    return row < 0 or row >= len(board) or col < 0 or col >= len(board[0])
+
+def get_new_position(direction, row, col):
+    direction_map = {
+        'N': (-1, 0), 'S': (1, 0), 'W': (0, -1), 'E': (0, 1),
+        'NW': (-1, -1), 'NE': (-1, 1), 'SW': (1, -1), 'SE': (1, 1)
+    }
+    return row + direction_map[direction][0], col + direction_map[direction][1]
+
 def is_possible_move(direction, row, col, board, player):
-    if (direction == 'N' and row == 0) or (direction == 'S' and row == len(board)-1) or \
-       (direction == 'W' and col == 0) or (direction == 'E' and col == len(board[0])-1):
-        return False
-    if (direction == 'NW' and (row == 0 or col == 0)) or \
-       (direction == 'NE' and (row == 0 or col == len(board[0])-1)) or \
-       (direction == 'SW' and (row == len(board)-1 or col == 0)) or \
-       (direction == 'SE' and (row == len(board)-1 or col == len(board[0])-1)):
+    new_row, new_col = get_new_position(direction, row, col)
+    
+    if is_out_of_bounds(new_row, new_col, board):
         return False
 
-    # Verificar que no haya otra ficha del mismo jugador en la casilla a la que se quiere mover
-    if direction == 'N' and (board[row-1][col] == player or board[row-1][col] == get_opponent(player)):
-        return False
-    if direction == 'S' and (board[row+1][col] == player or board[row+1][col] == get_opponent(player)):
-        return False
-    if direction == 'W' and (board[row][col-1] == player or board[row][col-1] == get_opponent(player)):
-        return False
-    if direction == 'E' and (board[row][col+1] == player or board[row][col+1] == get_opponent(player)):
-        return False
-    if direction == 'NW' and (board[row-1][col-1] == player or board[row-1][col-1] == get_opponent(player)):
-        return False
-    if direction == 'NE' and (board[row-1][col+1] == player or board[row-1][col+1] == get_opponent(player)):
-        return False
-    if direction == 'SW' and (board[row+1][col-1] == player or board[row+1][col-1] == get_opponent(player)):
-        return False
-    if direction == 'SE' and (board[row+1][col+1] == player or board[row+1][col+1] == get_opponent(player)):
+    target_cell = board[new_row][new_col]
+    if target_cell == player or target_cell == get_opponent(player):
         return False
 
     return True
-
 
 def get_available_moves(board, player):
     available_moves = []
