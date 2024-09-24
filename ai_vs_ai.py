@@ -429,10 +429,6 @@ def play_game():
 
     a1 = random.choice([BLACK, WHITE])
 
-    if a1 == BLACK:
-        a2 = WHITE
-    else:
-        a2 = BLACK
 
     player = BLACK  # set player to always be black
     state = (board, player)
