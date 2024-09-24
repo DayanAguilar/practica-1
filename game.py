@@ -168,10 +168,7 @@ def play_game():
         except ValueError:
             print('Invalid input. Please try again.')
 
-    if human_player == BLACK:
-        computer_player = WHITE
-    else:
-        computer_player = BLACK
+
 
     player = WHITE  # set player to always be black
     state = (board, player)
