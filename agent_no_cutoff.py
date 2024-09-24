@@ -4,49 +4,19 @@ import sys
 from utils import make_move, BLACK, WHITE, get_opponent
 
 
-def find_adjacencies(board):
-    number_b_adj = 0
-    number_w_adj = 0
 
+def find_adjacencies(board):
+    adjecencies = {BLACK:0, WHITE:0}
+    values = {BLACK:1, WHITE:-1}
+    offsets = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     for i in range(3):
         for j in range(3):
-            if board[i][j] == BLACK:
-                if board[i+1][j] == BLACK:
-                    number_b_adj += 1
-                if board[i-1][j] == BLACK:
-                    number_b_adj += 1
-                if board[i][j+1] == BLACK:
-                    number_b_adj += 1
-                if board[i][j-1] == BLACK:
-                    number_b_adj += 1
-                if board[i+1][j-1] == BLACK:
-                    number_b_adj += 1
-                if board[i+1][j+1] == BLACK:
-                    number_b_adj += 1
-                if board[i-1][j+1] == BLACK:
-                    number_b_adj += 1
-                if board[i-1][j-1] == BLACK:
-                    number_b_adj += 1
+                for offset_i, offset_j in offsets:
+                    color = board[i + offset_i][j + offset_j]
+                    if 0 <= i + offset_i < 3 and 0 <= j + offset_j < 3 and color != " " and color != None: 
+                        adjecencies[color] += values[color]
 
-            elif board[i][j] == WHITE:
-                if board[i+1][j] == WHITE:
-                    number_w_adj += 1
-                if board[i-1][j] == WHITE:
-                    number_w_adj += 1
-                if board[i][j+1] == WHITE:
-                    number_w_adj += 1
-                if board[i][j-1] == WHITE:
-                    number_w_adj += 1
-                if board[i+1][j-1] == WHITE:
-                    number_w_adj += 1
-                if board[i+1][j+1] == WHITE:
-                    number_w_adj += 1
-                if board[i-1][j+1] == WHITE:
-                    number_w_adj += 1
-                if board[i-1][j-1] == WHITE:
-                    number_w_adj += 1
-
-    return number_b_adj, number_w_adj
+    return adjecencies[BLACK], adjecencies[WHITE]
 
 
 def terminal_test(board, player):
