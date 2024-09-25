@@ -279,63 +279,31 @@ def display_board(board):
         if i < len(board) - 1:
             print(SPACE)
 
+def get_direction_offset(direction):
+    direction_map = {
+        "N": (-1, 0), "S": (1, 0), "W": (0, -1), "E": (0, 1),
+        "NW": (-1, -1), "NE": (-1, 1), "SW": (1, -1), "SE": (1, 1)
+    }
+    return direction_map.get(direction, (0, 0))
+
+def is_out_of_bounds(row, col, board):
+    return row < 0 or col < 0 or row >= len(board) or col >= len(board[0])
+
+def is_occupied(row, col, board, player):
+    cell = board[row][col]
+    return cell == player or cell == get_opponent(player)
 
 def is_possible_move(direction, row, col, board, player):
-    if (
-        (direction == "N" and row == 0)
-        or (direction == "S" and row == len(board) - 1)
-        or (direction == "W" and col == 0)
-        or (direction == "E" and col == len(board[0]) - 1)
-    ):
-        return False
-    if (
-        (direction == "NW" and (row == 0 or col == 0))
-        or (direction == "NE" and (row == 0 or col == len(board[0]) - 1))
-        or (direction == "SW" and (row == len(board) - 1 or col == 0))
-        or (direction == "SE" and (row == len(board) - 1 or col == len(board[0]) - 1))
-    ):
+    row_offset, col_offset = get_direction_offset(direction)
+    new_row, new_col = row + row_offset, col + col_offset
+
+    if is_out_of_bounds(new_row, new_col, board):
         return False
 
-    # Verificar que no haya otra ficha del mismo jugador en la casilla a la que se quiere mover
-    if direction == "N" and (
-        board[row - 1][col] == player or board[row - 1][col] == get_opponent(player)
-    ):
-        return False
-    if direction == "S" and (
-        board[row + 1][col] == player or board[row + 1][col] == get_opponent(player)
-    ):
-        return False
-    if direction == "W" and (
-        board[row][col - 1] == player or board[row][col - 1] == get_opponent(player)
-    ):
-        return False
-    if direction == "E" and (
-        board[row][col + 1] == player or board[row][col + 1] == get_opponent(player)
-    ):
-        return False
-    if direction == "NW" and (
-        board[row - 1][col - 1] == player
-        or board[row - 1][col - 1] == get_opponent(player)
-    ):
-        return False
-    if direction == "NE" and (
-        board[row - 1][col + 1] == player
-        or board[row - 1][col + 1] == get_opponent(player)
-    ):
-        return False
-    if direction == "SW" and (
-        board[row + 1][col - 1] == player
-        or board[row + 1][col - 1] == get_opponent(player)
-    ):
-        return False
-    if direction == "SE" and (
-        board[row + 1][col + 1] == player
-        or board[row + 1][col + 1] == get_opponent(player)
-    ):
+    if is_occupied(new_row, new_col, board, player):
         return False
 
     return True
-
 
 def get_computer_move1(state):
     board = state[0]
