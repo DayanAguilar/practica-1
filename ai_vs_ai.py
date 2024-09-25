@@ -43,42 +43,30 @@ def terminal_test(board, player):
 
     return False
 
+def count_adjacent_pieces(board, row, col, player):
+    adjacent_directions = [
+        (1, 0), (-1, 0), (0, 1), (0, -1), (1, -1), (1, 1), (-1, 1), (-1, -1)
+    ]
+    count = 0
+    for dr, dc in adjacent_directions:
+        new_row, new_col = row + dr, col + dc
+        if 0 <= new_row < len(board) and 0 <= new_col < len(board[0]):
+            if board[new_row][new_col] == player:
+                count += 1
+    return count
 
 def find_adjacencies(board):
     number_b_adj = 0
     number_w_adj = 0
 
-    for i in range(3):
-        for j in range(3):
+    for i in range(len(board)):
+        for j in range(len(board[0])):
             if board[i][j] == BLACK:
-                if board[i + 1][j] == BLACK:
-                    number_b_adj += 1
-                if board[i - 1][j] == BLACK:
-                    number_b_adj += 1
-                if board[i][j + 1] == BLACK:
-                    number_b_adj += 1
-                if board[i][j - 1] == BLACK:
-                    number_b_adj += 1
-                if board[i + 1][j - 1] == BLACK:
-                    number_b_adj += 1
-                if board[i + 1][j + 1] == BLACK:
-                    number_b_adj += 1
-                if board[i - 1][j + 1] == BLACK:
-                    number_b_adj += 1
-                if board[i - 1][j - 1] == BLACK:
-                    number_b_adj += 1
-
+                number_b_adj += count_adjacent_pieces(board, i, j, BLACK)
             elif board[i][j] == WHITE:
-                if board[i + 1][j] == WHITE:
-                    number_w_adj += 1
-                if board[i - 1][j] == WHITE:
-                    number_w_adj += 1
-                if board[i][j + 1] == WHITE:
-                    number_w_adj += 1
-                if board[i][j - 1] == WHITE:
-                    number_w_adj += 1
-    return number_b_adj, number_w_adj
+                number_w_adj += count_adjacent_pieces(board, i, j, WHITE)
 
+    return number_b_adj, number_w_adj
 
 def second_evaluation_function(state):
     board = state[0]

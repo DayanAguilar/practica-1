@@ -49,7 +49,7 @@ def display_board(board):
         print('{}  {} | {} | {} | {}'.format(
             i, row[0] or ' ', row[1] or ' ', row[2] or ' ', row[3] or ' '
         ))
-        if i < len(board):  # Add space between rows, except after the last one
+        if i < len(board):
             print(SPACE)
 
 # Define the function for getting user input for the move
