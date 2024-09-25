@@ -140,40 +140,26 @@ def forms_corners(board, player):
             return False
     return True
 
+def check_square(board, player, row, col):
+    return (
+        board[row][col] == player and
+        board[row][col + 1] == player and
+        board[row + 1][col] == player and
+        board[row + 1][col + 1] == player
+    )
 
 def forms_square(board, player):
-    # Check horizontal squares
     for i in range(3):
         for j in range(3):
-            if board[i][j] == player and board[i][j+1] == player and \
-                    board[i+1][j] == player and board[i+1][j+1] == player:
+            if check_square(board, player, i, j):
                 return True
 
-    # Check vertical squares
-    for i in range(3):
-        for j in range(3):
-            if board[i][j] == player and board[i+1][j] == player and \
-                    board[i][j+1] == player and board[i+1][j+1] == player:
-                return True
-
-    # Check diagonal squares
-    if board[0][0] == player and board[1][1] == player and \
-            board[0][1] == player and board[1][0] == player:
-        return True
-    if board[0][2] == player and board[1][1] == player and \
-            board[0][3] == player and board[1][2] == player:
-        return True
-    if board[1][0] == player and board[2][1] == player and \
-            board[1][1] == player and board[2][0] == player:
-        return True
-    if board[1][2] == player and board[2][1] == player and \
-            board[1][3] == player and board[2][2] == player:
-        return True
-    if board[2][0] == player and board[3][1] == player and \
-            board[2][1] == player and board[3][0] == player:
-        return True
-    if board[2][2] == player and board[3][1] == player and \
-            board[2][3] == player and board[3][2] == player:
-        return True
+    diagonal_positions = [
+        (0, 0), (0, 2), (1, 0), (1, 2), (2, 0), (2, 2)
+    ]
+    for row, col in diagonal_positions:
+        if board[row][col] == player and board[row + 1][col + 1] == player and \
+           board[row][col + 1] == player and board[row + 1][col] == player:
+            return True
 
     return False
