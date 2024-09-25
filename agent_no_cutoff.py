@@ -50,42 +50,45 @@ def utility(state):
 
 
 def alpha_beta_pruning(state, alpha, beta, maximizing_player, available_moves):
-    board = state[0]
-    player = state[1]
-
-    if (terminal_test(state[0], BLACK)) or (terminal_test(state[0], WHITE)):
-        return utility(state), 0
-
+    board, player = state
+    if terminal_test(board, BLACK) or terminal_test(board, WHITE):
+        return utility(state), None
+    
     if maximizing_player:
-        max_value = float('-inf')
-        best_move = None
-        for move in available_moves:
-            new_board = make_move(board, move, player)
-            new_state = [new_board, get_opponent(player)]
-            value, _ = AlphaBetaPrunning(new_state, alpha,
-                                         beta, False, available_moves)
-            if value > max_value:
-                max_value = value
-                best_move = move
-            alpha = max(alpha, max_value)
-            if beta <= alpha:
-                print(board)
-
-        return max_value, best_move
-
+        return maximize_value(board, player, alpha, beta, available_moves)
     else:
-        min_value = float('inf')
-        best_move = None
-        for move in available_moves:
-            new_board = make_move(board, move, player)
-            new_state = [new_board, get_opponent(player)]
-            value, _ = AlphaBetaPrunning(new_state, alpha,
-                                         beta, True, available_moves)
-            if value < min_value:
-                min_value = value
-                best_move = move
-            beta = min(beta, min_value)
-            if beta <= alpha:
-                print(board)
+        return minimize_value(board, player, alpha, beta, available_moves)
 
-        return min_value, best_move
+def maximize_value(board, player, alpha, beta, available_moves):
+    max_value = float('-inf')
+    best_move = None
+
+    for move in available_moves:
+        new_value, new_move = evaluate_move(board, player, move, alpha, beta, False, available_moves)
+        if new_value > max_value:
+            max_value, best_move = new_value, move
+        alpha = max(alpha, max_value)
+        if beta <= alpha:
+            break  
+
+    return max_value, best_move
+
+def minimize_value(board, player, alpha, beta, available_moves):
+    min_value = float('inf')
+    best_move = None
+
+    for move in available_moves:
+        new_value, new_move = evaluate_move(board, player, move, alpha, beta, True, available_moves)
+        if new_value < min_value:
+            min_value, best_move = new_value, move
+        beta = min(beta, min_value)
+        if beta <= alpha:
+            break  
+
+    return min_value, best_move
+
+def evaluate_move(board, player, move, alpha, beta, is_maximizing, available_moves):
+    new_board = make_move(board, move, player)
+    new_state = [new_board, get_opponent(player)]
+    return alpha_beta_pruning(new_state, alpha, beta, is_maximizing, available_moves)
+
