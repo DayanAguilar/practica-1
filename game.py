@@ -42,23 +42,17 @@ def check_win(board, player):
     return False
 # Define the function for displaying the game board
 
-
 def display_board(board):
     print('   A   B   C   D')
-    print('1  {} | {} | {} | {}'.format(
-        board[0][0] or ' ', board[0][1] or ' ', board[0][2] or ' ', board[0][3] or ' '))
-    print(SPACE)
-    print('2  {} | {} | {} | {}'.format(
-        board[1][0] or ' ', board[1][1] or ' ', board[1][2] or ' ', board[1][3] or ' '))
-    print(SPACE)
-    print('3  {} | {} | {} | {}'.format(
-        board[2][0] or ' ', board[2][1] or ' ', board[2][2] or ' ', board[2][3] or ' '))
-    print(SPACE)
-    print('4  {} | {} | {} | {}'.format(
-        board[3][0] or ' ', board[3][1] or ' ', board[3][2] or ' ', board[3][3] or ' '))
+    
+    for i, row in enumerate(board, start=1):
+        print('{}  {} | {} | {} | {}'.format(
+            i, row[0] or ' ', row[1] or ' ', row[2] or ' ', row[3] or ' '
+        ))
+        if i < len(board):  # Add space between rows, except after the last one
+            print(SPACE)
 
 # Define the function for getting user input for the move
-
 
 def get_user_move(state):
     board = state[0]
