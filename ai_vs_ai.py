@@ -293,31 +293,38 @@ def is_possible_move(direction, row, col, board, player):
 
     return True
 
+
 def get_computer_move1(state):
     board = state[0]
     player = state[1]
-    available_moves = []
-    counter = 0
-
-    for i in range(4):
-        for j in range(4):
-            if board[i][j] == player:
-                for direction in ["N", "S", "E", "W", "NW", "NE", "SW", "SE"]:
-
-                    move = f"{chr(ord('A') + j)}{i+1} {direction}"
-                    row, col, direction = traduction_move(move)
-                    if is_possible_move(direction, row, col, board, player):
-                        available_moves.append(move)
-
+    available_moves = get_available_moves(board, player)
     if not available_moves:
         return None
-
     max_depth = 3
+    counter = 0
     _, best_move, counter = AlphaBetaPrunningDepth1(
         state, max_depth, float("-inf"), float("inf"), True, available_moves, counter
     )
     print("Number of states expanded: ", counter)
     return best_move
+
+
+def get_available_moves(board, player):
+    available_moves = []
+    for i in range(4):
+        for j in range(4):
+            if board[i][j] == player:
+                available_moves.extend(generate_moves(i, j, board, player))
+    return available_moves
+def generate_moves(i, j, board, player):
+    directions = ["N", "S", "E", "W", "NW", "NE", "SW", "SE"]
+    moves = []
+    for direction in directions:
+        move = f"{chr(ord('A') + j)}{i + 1} {direction}"
+        row, col, direction = traduction_move(move)
+        if is_possible_move(direction, row, col, board, player):
+            moves.append(move)
+    return moves
 
 
 def get_computer_move2(state):
