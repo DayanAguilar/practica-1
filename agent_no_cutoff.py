@@ -64,7 +64,7 @@ def maximize_value(board, player, alpha, beta, available_moves):
     best_move = None
 
     for move in available_moves:
-        new_value, new_move = evaluate_move(board, player, move, alpha, beta, False, available_moves)
+        new_value, _ = evaluate_move(board, player, move, alpha, beta, False, available_moves)
         if new_value > max_value:
             max_value, best_move = new_value, move
         alpha = max(alpha, max_value)
@@ -78,7 +78,7 @@ def minimize_value(board, player, alpha, beta, available_moves):
     best_move = None
 
     for move in available_moves:
-        new_value, new_move = evaluate_move(board, player, move, alpha, beta, True, available_moves)
+        new_value, _ = evaluate_move(board, player, move, alpha, beta, True, available_moves)
         if new_value < min_value:
             min_value, best_move = new_value, move
         beta = min(beta, min_value)
