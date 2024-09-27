@@ -90,16 +90,13 @@ def get_all_moves(board, player):
     for i in range(4):
         for j in range(4):
             if board[i][j] == EMPTY:
-                # Simulate the move
                 temp_board = copy.deepcopy(board)
                 temp_board[i][j] = player
 
-                # Check if the move results in a win or special conditions
                 if is_winning_or_creates_special_case(temp_board, player):
                     moves.append((i, j))
                     continue
 
-                # Otherwise, add the move to the list of available moves
                 moves.append((i, j))
 
     return moves

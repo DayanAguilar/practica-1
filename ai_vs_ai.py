@@ -139,7 +139,7 @@ def first_evaluation_function(state):
     return value
 
 
-def AlphaBetaPrunningDepth1(
+def alpha_beta_prunning_depth_1(
     state, depth, alpha, beta, maximizing_player, available_moves, counter
 ):
     board, player = state
@@ -155,7 +155,7 @@ def AlphaBetaPrunningDepth1(
         new_board = make_move(board, move, player)
         new_state = [new_board, get_opponent(player)]
         
-        value, _, counter = AlphaBetaPrunningDepth1(
+        value, _, counter = alpha_beta_prunning_depth_1(
             new_state, depth - 1, alpha, beta, not maximizing_player, available_moves, counter
         )
 
@@ -220,9 +220,7 @@ def create_board():
     board[3][3] = "B"
     return board
 
-
 # Define the function for checking if a player has won
-
 
 def check_win(board, player):
 
@@ -254,9 +252,7 @@ def check_win(board, player):
 
     return False
 
-
 # Define the function for displaying the game board
-
 
 def display_board(board):
     columns = "   A   B   C   D"
@@ -302,7 +298,7 @@ def get_computer_move1(state):
         return None
     max_depth = 3
     counter = 0
-    _, best_move, counter = AlphaBetaPrunningDepth1(
+    _, best_move, counter = alpha_beta_prunning_depth_1(
         state, max_depth, float("-inf"), float("inf"), True, available_moves, counter
     )
     print("Number of states expanded: ", counter)
@@ -358,9 +354,7 @@ def generate_moves(i, j, board, player):
             moves.append(move)
     return moves
 
-
 # Define the function for playing the game
-
 
 def play_game():
     board = create_board()
