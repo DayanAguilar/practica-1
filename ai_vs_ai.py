@@ -1,5 +1,6 @@
 import time
 import random
+import secrets
 import copy
 from utils import (
     BLACK,
@@ -360,7 +361,7 @@ def play_game():
     board = create_board()
     display_board(board)
 
-    a1 = random.choice([BLACK, WHITE])
+    a1 = secrets.choice([BLACK, WHITE])
 
 
     player = BLACK  # set player to always be black
