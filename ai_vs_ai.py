@@ -173,7 +173,7 @@ def alpha_beta_prunning_depth_1(
 
     return best_value, best_move, counter
 
-def AlphaBetaPrunningDepth2(
+def alpha_beta_prunning_depth_2(
     state, depth, alpha, beta, maximizing_player, available_moves, counter
 ):
     board, player = state
@@ -189,7 +189,7 @@ def AlphaBetaPrunningDepth2(
         new_board = make_move(board, move, player)
         new_state = [new_board, get_opponent(player)]
 
-        value, _, counter = AlphaBetaPrunningDepth2(
+        value, _, counter = alpha_beta_prunning_depth_2(
             new_state, depth - 1, alpha, beta, not maximizing_player, available_moves, counter
         )
 
@@ -330,7 +330,7 @@ def get_computer_move2(state):
         return None
     max_depth = 3
     counter = 0
-    _, best_move, counter = AlphaBetaPrunningDepth2(
+    _, best_move, counter = alpha_beta_prunning_depth_2(
         state, max_depth, float("-inf"), float("inf"), True, available_moves, counter
     )
     print("Number of states expanded: ", counter)
